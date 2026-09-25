@@ -44,14 +44,30 @@
 
 ## 3. 다섯 가지 동작 — commit · push · pull · merge · PR
 
+```mermaid
+flowchart LR
+    subgraph ME["내 컴퓨터"]
+        direction TB
+        F["① 파일을 고친다"] --> C["② commit<br/>기록에 남긴다"]
+    end
+    subgraph GH["GitHub"]
+        direction TB
+        R["저장소"]
+        PR["⑤ PR<br/>합치기 전에 보여 주는 자리"]
+    end
+
+    C -->|"③ push — 올린다"| R
+    R -->|"pull — 받아온다"| C
+    R --> PR
+    PR -->|"④ merge — 합친다"| R
+
+    style ME fill:#e3f2fd,stroke:#1976d2
+    style GH fill:#f3e5f5,stroke:#7b1fa2
+    style PR fill:#fff3cd,stroke:#d39e00
 ```
-   1.  파일을 고친다
-   2.  commit         내 컴퓨터의 기록에 "여기까지 했다"고 남긴다
-   3.  push    -->    GitHub 에 올린다. 이때부터 남이 볼 수 있다
-       pull    <--    남이 올린 것을 내 컴퓨터로 받아온다
-   4.  merge          갈라져 있던 두 가지를 하나로 합친다
-   5.  PR      -->    합치기 전에 "이렇게 바꿉니다" 하고 보여 주는 자리
-```
+
+왼쪽 상자 안(내 컴퓨터)에서 벌어지는 일과 오른쪽(GitHub)에서 벌어지는 일이 나뉜다는 것이
+이 그림의 요점이다. **commit 은 왼쪽, push 부터가 오른쪽이다.**
 
 **commit (커밋) — 기록에 남기기**
 지금까지 고친 것을 한 덩어리로 묶어 기록에 남긴다. 사진 한 장 찍는 것과 같다.
@@ -115,16 +131,24 @@ PR의 "Merge" 버튼이 실제로 하는 일도 merge 다.
 
 브랜치(가지) = **원본을 건드리지 않고 따로 갈라 둔 작업용 사본.**
 
-```
-   main         o-----o-----o-------------------o-->
-                             \                 /
-   feat/mission3              o----o----o------
-                            (1)               (2)
+```mermaid
+gitGraph
+    commit id: "지난 작업"
+    commit id: "지난 작업2"
+    branch feat/mission3
+    checkout feat/mission3
+    commit id: "대사 고침"
+    commit id: "배경 교체"
+    checkout main
+    merge feat/mission3 id: "PR 로 합치기"
+    commit id: "다음 작업"
 ```
 
-- **(1) 가지 따기** — 지금 main 의 상태를 그대로 복사해 옆으로 갈라 나온다.
+- **가지 따기** — 지금 main 의 상태를 그대로 복사해 옆으로 갈라 나온다.
   이 순간부터 내가 무엇을 하든 **main 은 아무 영향을 받지 않는다.**
-- **(2) 합치기** — 작업이 끝나면 PR을 올리고, 확인을 거쳐 main 에 들어간다.
+  위 그림에서 아래쪽으로 갈라져 나온 줄이 내 가지다.
+- **합치기** — 작업이 끝나면 PR을 올리고, 확인을 거쳐 main 에 들어간다.
+  두 줄이 다시 하나로 모이는 지점이다.
 
 ### 왜 굳이 따로 떼서 작업하나
 
