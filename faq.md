@@ -110,6 +110,38 @@ Cloudflare Pages는 대역폭 무제한이고 애초에 CDN 제품이다.
 이 프로젝트는 페이지끼리 js·css를 공유하지 않는다. 그래서 **무엇을 어떻게 고치든
 망가질 수 있는 범위가 그 폴더 하나**로 묶인다.
 
+빨간색이 **미션3을 고쳤을 때 함께 위험해지는 범위**다.
+
+```mermaid
+flowchart TB
+    subgraph A["공통 코드를 함께 쓸 때"]
+        direction TB
+        CM["공통 코드<br/>(음소거 · 효과음 · 화면 맞춤)"]
+        CM --> M1A["미션1"]
+        CM --> M2A["미션2"]
+        CM --> M3A["미션3 ← 여기를 고쳤다"]
+    end
+
+    subgraph B["이 프로젝트 (공유하지 않음)"]
+        direction TB
+        M1B["미션1<br/>자기 복사본"]
+        M2B["미션2<br/>자기 복사본"]
+        M3B["미션3 ← 여기를 고쳤다<br/>자기 복사본"]
+    end
+
+    style CM fill:#f8d7da,stroke:#dc3545
+    style M1A fill:#f8d7da,stroke:#dc3545
+    style M2A fill:#f8d7da,stroke:#dc3545
+    style M3A fill:#f8d7da,stroke:#dc3545
+    style M3B fill:#f8d7da,stroke:#dc3545
+    style M1B fill:#d4edda,stroke:#28a745
+    style M2B fill:#d4edda,stroke:#28a745
+```
+
+**〈공통 코드를 함께 쓸 때〉** 는 미션3 하나를 건드렸는데 **셋 다 위험해진다.**
+**〈이 프로젝트〉** 는 **고친 그 하나만** 위험하다.
+그리고 앞쪽의 진짜 문제는, 작업자가 미션3만 확인하고 넘어가므로 **미션1이 깨진 걸 모른다**는 점이다.
+
 ### 실제로 그렇게 되어 있다
 
 | 확인 항목                | 결과                                                          |
