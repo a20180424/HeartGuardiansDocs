@@ -42,7 +42,8 @@ git 자체가 처음이라면 [Git과 GitHub 안내](git-basics.md)를 먼저 �
 
 ```mermaid
 flowchart TD
-    P(["사람<br/>〈홈 화면의 별이 너무 작아〉"]) --> CC[["Claude Code<br/>(VS Code 확장)"]]
+    P(["사람<br/>〈홈 화면의 별이 너무 작아〉"]) --> VSC["VS Code<br/>파일을 보고 고치는 편집기"]
+    VSC --> CC[["Claude Code<br/>VS Code 안에서 도는 확장"]]
 
     CC -->|"읽고 고친다"| FILES["내 컴퓨터의 파일<br/>www/ · android/"]
     CC -->|"실행한다"| TERM["터미널"]
@@ -59,13 +60,19 @@ flowchart TD
     SB --> DB[("데이터베이스")]
     CF --> DEPLOY["배포된 API · 웹"]
     GIT --> GH["GitHub"]
+    FILES -.->|"바뀐 줄이 색으로 보인다"| VSC
 
+    style VSC fill:#e8eaf6,stroke:#3f51b5
     style CC fill:#ede7f6,stroke:#673ab7
     style SP fill:#f3e5f5,stroke:#9c27b0,stroke-dasharray: 4 3
     style PW fill:#e3f2fd,stroke:#1976d2
     style SB fill:#e8f5e9,stroke:#2e7d32
     style CF fill:#fff3e0,stroke:#ef6c00
 ```
+
+**VS Code 는 편집기이고, Claude Code 는 그 안에서 도는 확장**이다. 사람은 VS Code 를 열어
+그 안의 Claude Code 와 대화하고, Claude Code 가 고친 결과는 다시 VS Code 화면에 색으로 표시된다
+(점선). 그래서 코드를 직접 타이핑하지 않아도 무엇이 바뀌었는지 눈으로 따라갈 수 있다.
 
 점선으로 이어진 **Superpowers만 성격이 다르다.** 나머지는 Claude Code 가 *무언가에 닿게* 해 주는
 도구인데, 이것은 닿을 곳을 늘리지 않고 **일하는 순서**만 바꾼다.
