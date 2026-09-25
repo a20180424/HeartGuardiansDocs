@@ -1,10 +1,15 @@
 <!-- mermaid 다이어그램 렌더링.
-     GitHub 웹은 ```mermaid 블록을 알아서 그려 주지만 GitHub Pages(Jekyll)는 그러지 않고
-     그냥 코드 블록으로 남긴다. 그래서 Jekyll 이 만들어 둔
-     <pre><code class="language-mermaid"> 를 찾아 mermaid 에 넘긴다.
-     primer 테마의 default 레이아웃이 이 파일을 <head> 안에 include 한다. -->
+     GitHub 웹은 mermaid 코드 블록을 알아서 그려 주지만 GitHub Pages(Jekyll)는
+     그러지 않고 그냥 코드 블록으로 남긴다. 그래서 Jekyll 이 만들어 둔
+     language-mermaid 코드 블록을 찾아 mermaid 에 넘긴다.
+     primer 테마의 default 레이아웃이 이 파일을 head 안에 include 한다. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.15.0/mermaid.min.js"></script>
 <script>
+  // 스크립트가 로드되는 즉시 자동 실행을 끈다.
+  // DOMContentLoaded 안에서 끄면 늦다 — mermaid 자신의 자동 처리와 아래 run() 이
+  // 같은 노드를 동시에 렌더하려다 한쪽이 실패하면서 미처리 거부가 남는다.
+  mermaid.initialize({ startOnLoad: false });
+
   document.addEventListener("DOMContentLoaded", function () {
     var blocks = document.querySelectorAll("pre > code.language-mermaid");
     if (!blocks.length) return;
@@ -15,7 +20,8 @@
       holder.textContent = code.textContent;
       code.parentNode.parentNode.replaceChild(holder, code.parentNode);
     });
-    mermaid.initialize({ startOnLoad: false });
-    mermaid.run({ querySelector: "pre.mermaid" });
+    mermaid.run({ querySelector: "pre.mermaid" }).catch(function (err) {
+      console.error("[mermaid] 렌더 실패:", err);
+    });
   });
 </script>
