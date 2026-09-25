@@ -144,6 +144,29 @@ Cloudflare Workers는 Node.js 서버가 아니라 **V8 isolate 기반 서버리�
 | `teachers`                   | 선생님                                     |
 | `admins`                     | 운영자                                     |
 
+표끼리 어떻게 연결되어 있는지는 이렇다. 선은 실제로 데이터베이스에 걸려 있는 연결(외래키)이다.
+
+```mermaid
+erDiagram
+    schools ||--o{ profiles : "학생이 다닌다"
+    schools ||--o{ teachers : "선생님이 소속된다"
+    schools ||--o{ class_boards : "학급 게시판을 갖는다"
+    schools ||--o{ emotion_guide_submissions : ""
+    profiles ||--o{ planet_reviews : "소감을 남긴다"
+    profiles ||--o| emotion_guide_submissions : "감정 가이드에 답한다"
+    admins }o--|| teachers : "가입을 승인한다"
+
+    schools { text name "학교 이름" }
+    profiles { text name "이름" int grade_class_number "학년·반·번호" int progress "0~4" }
+    teachers { text account_status "승인 대기·승인·거절" int grade_class "담당 학년·반" }
+    planet_reviews { int planet "1~4" text content "소감" }
+    emotion_guide_submissions { jsonb answers "10문항 응답" }
+    class_boards { text planet1_url "행성별 게시판 주소" }
+```
+
+읽는 법 — `||--o{` 는 **"왼쪽 하나에 오른쪽 여럿"** 이라는 뜻이다.
+학교 하나에 학생이 여럿, 학생 하나에 소감이 여럿 달린다.
+
 ## 4. 인증 — 두 갈래
 
 같은 앱 안에 성격이 전혀 다른 두 사용자가 있어서, 인증도 두 갈래로 나뉜다.
@@ -177,6 +200,54 @@ DB 테이블이 아니라 **Supabase가 제공하는 Authentication 기능**을 
 클라이언트가 무엇을 요청하든 자기 반 데이터만 보이는 것은 DB가 보장한다.
 
 즉 **학생 데이터는 API 서버가 지키고, 선생님 데이터는 DB가 직접 지키는** 이중 구조다.
+
+```mermaid
+flowchart LR
+    S["학생"] -->|"학교·학년·반·번호·PIN<br/>매 요청 헤더에"| API["API 서버"]
+    API -->|"master 키"| DB[("데이터베이스")]
+    T["선생님 · 운영자"] -->|"이메일 · 비밀번호"| AUTH["Supabase<br/>Authentication"]
+    AUTH -->|"신분증(토큰)"| T
+    T -->|"신분증을 들고 직접"| DB
+
+    G1{{"여기서 권한을 판단"}} -.-> API
+    G2{{"여기서 권한을 판단"}} -.-> DB
+
+    style API fill:#fff3cd,stroke:#d39e00
+    style DB fill:#d4edda,stroke:#28a745
+    style G1 fill:#fff3cd,stroke:#d39e00
+    style G2 fill:#d4edda,stroke:#28a745
+```
+
+**노란색이 판단하는 곳, 초록색이 판단하는 곳**이 서로 다르다는 것이 이 그림의 요점이다.
+학생 쪽은 API 서버가 확인해 주고, 선생님 쪽은 데이터베이스가 스스로 판단한다.
+
+### 행성 하나를 끝냈을 때 벌어지는 일
+
+학생이 행성1을 완료하면 진도가 이렇게 저장된다.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant 앱
+    participant API as API 서버
+    participant DB as 데이터베이스
+
+    앱->>앱: 화면의 진도를 먼저 올린다 (기다리지 않음)
+    앱->>API: PUT /api/progress/1<br/>자격증명 헤더 + 소감
+    API->>DB: 이 학번·PIN 이 맞나?
+    DB-->>API: 맞다 (학생 정보)
+    API->>DB: 지금 진도가 몇인가?
+    DB-->>API: 0
+    Note over API: 행성을 건너뛰지 않았는지 검사<br/>(현재 진도 + 1 까지만 허용)
+    API->>DB: 진도를 1 로 갱신
+    API->>DB: 소감 저장
+    API-->>앱: 저장 완료
+
+    Note over 앱,API: 여기서 실패하면 앱이 기기에 적어 두었다가<br/>다음 로그인 때 다시 보낸다
+```
+
+화면을 먼저 넘기고 저장은 뒤에서 하기 때문에, **네트워크가 느려도 아이는 기다리지 않는다.**
+저장이 실패해도 기록은 기기에 남아 다음 로그인 때 복구된다.
 
 ## 5. 발표용 정리
 
