@@ -42,7 +42,7 @@ git 자체가 처음이라면 [Git과 GitHub 안내](git-basics.md)를 먼저 �
 
 ```mermaid
 flowchart TD
-    P(["사람<br/>〈홈 화면의 별이 너무 작아〉"]) --> CC{{"Claude Code<br/>(VS Code 확장)"}}
+    P(["사람<br/>〈홈 화면의 별이 너무 작아〉"]) --> CC[["Claude Code<br/>(VS Code 확장)"]]
 
     CC -->|"읽고 고친다"| FILES["내 컴퓨터의 파일<br/>www/ · android/"]
     CC -->|"실행한다"| TERM["터미널"]

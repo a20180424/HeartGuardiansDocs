@@ -209,8 +209,8 @@ flowchart LR
     AUTH -->|"신분증(토큰)"| T
     T -->|"신분증을 들고 직접"| DB
 
-    G1{{"여기서 권한을 판단"}} -.-> API
-    G2{{"여기서 권한을 판단"}} -.-> DB
+    G1(["여기서 권한을 판단"]) -.-> API
+    G2(["여기서 권한을 판단"]) -.-> DB
 
     style API fill:#fff3cd,stroke:#d39e00
     style DB fill:#d4edda,stroke:#28a745
