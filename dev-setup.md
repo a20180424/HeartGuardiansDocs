@@ -37,16 +37,38 @@ git 자체가 처음이라면 [Git과 GitHub 안내](git-basics.md)를 먼저 �
 
 ## 2. 전체 그림 — Claude Code에게 쥐여 주는 네 가지
 
+사람이 한 문장을 말하면, Claude Code 가 네 방향으로 손을 뻗는다.
+**어떤 도구가 어디에 닿는지**를 한 장에 그리면 이렇다.
+
+```mermaid
+flowchart TD
+    P(["사람<br/>〈홈 화면의 별이 너무 작아〉"]) --> CC{{"Claude Code<br/>(VS Code 확장)"}}
+
+    CC -->|"읽고 고친다"| FILES["내 컴퓨터의 파일<br/>www/ · android/"]
+    CC -->|"실행한다"| TERM["터미널"]
+    CC -->|"열어서 확인한다"| PW["Playwright<br/>〈MCP 서버〉"]
+    CC -->|"직접 조회·수정한다"| SB["Supabase<br/>〈플러그인〉"]
+    CC -->|"배포를 확인한다"| CF["Cloudflare<br/>〈플러그인〉"]
+    CC -.->|"일하는 순서를 바꾼다"| SP["Superpowers<br/>〈플러그인 · 도구 아님〉"]
+
+    TERM --> NODE["Node.js · npm<br/>개발 서버 · 빌드"]
+    TERM --> GIT["git · gh<br/>기록 · PR"]
+    TERM --> CAP["Capacitor + 안드로이드 도구<br/>APK 만들기"]
+
+    PW --> BROWSER["브라우저<br/>1280x800 · 배율 1.5 · 터치<br/>(갤럭시 탭과 같은 조건)"]
+    SB --> DB[("데이터베이스")]
+    CF --> DEPLOY["배포된 API · 웹"]
+    GIT --> GH["GitHub"]
+
+    style CC fill:#ede7f6,stroke:#673ab7
+    style SP fill:#f3e5f5,stroke:#9c27b0,stroke-dasharray: 4 3
+    style PW fill:#e3f2fd,stroke:#1976d2
+    style SB fill:#e8f5e9,stroke:#2e7d32
+    style CF fill:#fff3e0,stroke:#ef6c00
 ```
-   사람     "홈 화면의 별이 너무 작아"
-      |
-   Claude Code
-      |
-      +--  파일을 읽고 고친다
-      +--  명령을 실행한다
-      +--  브라우저를 열어 결과를 눈으로 확인한다
-      +--  바깥 서비스(데이터베이스 · 배포)를 직접 다룬다
-```
+
+점선으로 이어진 **Superpowers만 성격이 다르다.** 나머지는 Claude Code 가 *무언가에 닿게* 해 주는
+도구인데, 이것은 닿을 곳을 늘리지 않고 **일하는 순서**만 바꾼다.
 
 | Claude Code가 하는 일          | 그래서 필요한 것                          |
 | ------------------------- | ------------------------------------------ |
@@ -260,6 +282,22 @@ Superpowers를 켜면 Claude Code가 **바로 만들지 않고 먼저 묻는다.
 | 4. 구현           | 계획을 하나씩 실행한다                   | 코드              |
 | 5. 검증           | 정말 동작하는지 확인하고 결과를 보고한다  | 확인된 결과       |
 
+```mermaid
+flowchart LR
+    B["① 브레인스토밍<br/>묻고 답한다"] --> S["② 스펙 문서<br/>무엇을 만들지"]
+    S --> P["③ 구현 계획<br/>어떤 순서로"]
+    P --> I["④ 구현"]
+    I --> V["⑤ 검증<br/>정말 되는지"]
+    V -.->|"안 되면 되돌아간다"| I
+
+    S -.-> SD["specs/ 34개"]
+    P -.-> PD["plans/ 31개"]
+
+    style B fill:#ede7f6,stroke:#673ab7
+    style SD fill:#f5f5f5,stroke:#9e9e9e
+    style PD fill:#f5f5f5,stroke:#9e9e9e
+```
+
 **이 프로젝트에 그 기록이 그대로 남아 있다.**
 
 - 스펙 문서 **34개** (`docs/superpowers/specs/`)
@@ -309,6 +347,17 @@ Superpowers를 켜면 Claude Code가 **바로 만들지 않고 먼저 묻는다.
 | 1    | `www/` 를 안드로이드 프로젝트 안으로 복사  | **Capacitor**                        |
 | 2    | 그 프로젝트를 APK 파일로 굽는다            | Gradle + **JDK** + **Android SDK**   |
 | 3    | 만들어진 APK 를 태블릿에 설치한다          | adb (Android SDK 에 포함)            |
+
+```mermaid
+flowchart LR
+    W["www/<br/>HTML · CSS · JS · 에셋"] -->|"① cap sync<br/><b>Capacitor</b>"| AP["안드로이드 프로젝트"]
+    AP -->|"② 빌드<br/>Gradle + JDK + SDK"| APK["app-debug.apk"]
+    APK -->|"③ 설치<br/>adb"| TAB["갤럭시 탭"]
+
+    style W fill:#e3f2fd,stroke:#1976d2
+    style AP fill:#fff3e0,stroke:#ef6c00
+    style APK fill:#e8f5e9,stroke:#2e7d32
+```
 
 **Capacitor가 하는 일은 1단계까지다.** 웹앱을 "표준 안드로이드 프로젝트"로 만들어 주는 것이
 Capacitor의 역할이고, 그것을 실제 APK 파일로 굽는 일은 안드로이드 쪽 빌드 도구의 몫이다.
