@@ -2,6 +2,9 @@
 
 하트가디언즈 우주공감탐험대의 App · API · DB 구성 정리. (2026-09 기준)
 
+> 서버 · API · 데이터베이스가 **왜** 필요한지부터 알고 싶다면
+> [내 컴퓨터 밖으로 — 배포와 서버](deploy-and-server.md)를 먼저 읽는 편이 낫다.
+
 > **한 줄 요약**
 > 프레임워크 없는 순수 웹 기술로 만든 게임을 **Capacitor**로 안드로이드 APK로 패키징하고,
 > **Cloudflare Workers**의 API를 통해 **Supabase PostgreSQL**과 통신한다.
