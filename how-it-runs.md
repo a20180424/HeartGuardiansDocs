@@ -13,12 +13,23 @@
 
 ## 1. 무엇이 무엇 안에 들어 있나
 
-```
-태블릿 (Galaxy Tab A9+)
- └─ 안드로이드
-     └─ 하트가디언즈 앱          ← APK 로 설치된 것
-         └─ WebView              ← 주소창도 탭도 없는 브라우저
-             └─ 게임 화면         ← 우리가 만든 HTML · CSS · JavaScript
+```mermaid
+flowchart TB
+    subgraph TAB["태블릿 (Galaxy Tab A9+)"]
+        subgraph AND["안드로이드"]
+            subgraph APP["하트가디언즈 앱 — APK 로 설치된 것"]
+                subgraph WV["WebView — 주소창도 탭도 없는 브라우저"]
+                    G["게임 화면<br/>우리가 만든 HTML · CSS · JavaScript"]
+                end
+            end
+        end
+    end
+
+    style TAB fill:#f5f5f5,stroke:#9e9e9e
+    style AND fill:#eceff1,stroke:#607d8b
+    style APP fill:#e8eaf6,stroke:#3f51b5
+    style WV fill:#e3f2fd,stroke:#1976d2
+    style G fill:#fff,stroke:#0d47a1
 ```
 
 핵심은 **WebView** 한 칸이다.
@@ -89,6 +100,29 @@ APK
 
 실제로 앱 코드가 인터넷을 쓰는 곳은 **API 서버와 Supabase 두 곳뿐**이고,
 화면을 그리는 데 필요한 파일은 **단 하나도 외부에서 불러오지 않는다.**
+
+경계선을 그으면 이렇게 나뉜다.
+
+```mermaid
+flowchart LR
+    subgraph IN["태블릿 안에서 끝나는 일 — 인터넷 불필요"]
+        direction TB
+        I1["게임 화면 · 그림"]
+        I2["영상 · 소리"]
+        I3["3D 모델"]
+        I4["진도 · 음소거 기억하기"]
+    end
+    subgraph OUT["인터넷이 있어야 하는 일"]
+        direction TB
+        O1["로그인"]
+        O2["행성 완료 진도 저장"]
+        O3["선생님 콘솔"]
+    end
+    IN -.->|"경계"| OUT
+
+    style IN fill:#d4edda,stroke:#28a745
+    style OUT fill:#fff3cd,stroke:#d39e00
+```
 
 > **그래서 — 교실 와이파이가 흔들려도 게임은 끊기지 않는다.**
 > 진도 저장이 잠깐 실패해도 기기에 적어 뒀다가 다음에 다시 보내므로 기록도 잃지 않는다.
