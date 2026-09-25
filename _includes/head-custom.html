@@ -1,0 +1,21 @@
+<!-- mermaid 다이어그램 렌더링.
+     GitHub 웹은 ```mermaid 블록을 알아서 그려 주지만 GitHub Pages(Jekyll)는 그러지 않고
+     그냥 코드 블록으로 남긴다. 그래서 Jekyll 이 만들어 둔
+     <pre><code class="language-mermaid"> 를 찾아 mermaid 에 넘긴다.
+     primer 테마의 default 레이아웃이 이 파일을 <head> 안에 include 한다. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.15.0/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var blocks = document.querySelectorAll("pre > code.language-mermaid");
+    if (!blocks.length) return;
+    Array.prototype.forEach.call(blocks, function (code) {
+      var holder = document.createElement("pre");
+      holder.className = "mermaid";
+      // textContent 로 읽어야 &lt; 같은 것이 원래 문자로 돌아온다.
+      holder.textContent = code.textContent;
+      code.parentNode.parentNode.replaceChild(holder, code.parentNode);
+    });
+    mermaid.initialize({ startOnLoad: false });
+    mermaid.run({ querySelector: "pre.mermaid" });
+  });
+</script>
