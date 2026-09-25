@@ -196,3 +196,7 @@ App · API · DB 로 나뉜 것은 누가 정해 준 형식이 아니라,
 
 같은 앱 안에서 한쪽은 서버가 필요 없고 한쪽은 필요하다.
 두 가지 일이 별개라는 뜻이다. ([앱이 태블릿에서 실행되기까지](how-it-runs.md))
+
+---
+
+**문서 이동** — [목록](./) · **배포와 서버** · [기술 구성](tech-stack.md) · [실행 원리](how-it-runs.md) · [FAQ](faq.md) · [용어 설명](glossary.md) · [Git 안내](git-basics.md) · [개발 환경](dev-setup.md)

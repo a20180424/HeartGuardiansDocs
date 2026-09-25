@@ -221,3 +221,7 @@
 ★★☆ 🟢 **배포 (Deploy)** — 만든 코드를 **실제로 동작하는 자리에 올리는 것**.
 → API는 코드를 GitHub에 반영하면 자동으로 배포된다.
 → 배포가 왜 필요한지는 [내 컴퓨터 밖으로 — 배포와 서버](deploy-and-server.md)에 자세히 있다.
+
+---
+
+**문서 이동** — [목록](./) · [배포와 서버](deploy-and-server.md) · [기술 구성](tech-stack.md) · [실행 원리](how-it-runs.md) · [FAQ](faq.md) · **용어 설명** · [Git 안내](git-basics.md) · [개발 환경](dev-setup.md)

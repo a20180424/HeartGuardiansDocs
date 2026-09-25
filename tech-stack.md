@@ -197,3 +197,7 @@ DB 테이블이 아니라 **Supabase가 제공하는 Authentication 기능**을 
 발표·심사에서 나올 만한 질문과 답은 [발표 예상 질문 (FAQ)](faq.md)에 따로 모아 둔다.
 앱이 태블릿에서 실행되는 원리는 [앱이 태블릿에서 실행되기까지](how-it-runs.md),
 용어가 낯설다면 [기술 용어 설명](glossary.md)을 참고.
+
+---
+
+**문서 이동** — [목록](./) · [배포와 서버](deploy-and-server.md) · **기술 구성** · [실행 원리](how-it-runs.md) · [FAQ](faq.md) · [용어 설명](glossary.md) · [Git 안내](git-basics.md) · [개발 환경](dev-setup.md)
